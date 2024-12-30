@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inscription Formation</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #121212;
+      color: #fff;
+      overflow-x: hidden;
+      margin: 0; 
+      padding-top: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 20px auto;
+      background: #1f1f1f;
+      border-radius: 15px;
+      padding: 20px 30px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+      animation: fadeIn 1.2s ease-out;
+      width: 100%;
+    }
+
+    h2 {
+      text-align: center;
+      color: #f39c12;
+      font-size: 2.2rem;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+    }
+
+    label {
+      display: block;
+      margin: 10px 0 5px;
+      font-weight: 600;
+      color: #f0f0f0;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: none;
+      border-radius: 8px;
+      background: #292929;
+      color: #fff;
+      font-size: 1rem;
+      box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.5);
+      outline: none;
+    }
+
+    button {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(45deg, #f39c12, #e67e22);
+      color: #fff;
+      font-size: 1.2rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: linear-gradient(45deg, #e67e22, #f39c12);
+      box-shadow: 0 5px 15px rgba(243, 156, 18, 0.5);
+    }
+
+    .confirmation-message {
+      text-align: center;
+      color: #fff;
+      font-size: 1.5rem;
+      background: #28a745;
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Assurer qu'il y a de l'espace pour scroller */
+    html, body {
+      height: 100%;
+    }
+
+    .content {
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+  </style>
+</head>
+<body>
+  <div class="content">
+    <div class="container" id="formContainer">
+      <h2>Inscription Formation</h2>
+      <form id="formationForm" enctype="multipart/form-data">
+        <label for="nom">Nom</label>
+        <input type="text" id="nom" name="Nom" placeholder="Votre nom" required>
+
+        <label for="prenom">Prénom</label>
+        <input type="text" id="prenom" name="Prénom" placeholder="Votre prénom" required>
+
+        <label for="age">Âge</label>
+        <input type="number" id="age" name="Âge" placeholder="Votre âge" required>
+
+        <label for="numero">Numéro de téléphone</label>
+        <input type="tel" id="numero" name="Numéro" placeholder="Ex. +226xxxxxxxx" required>
+
+        <label for="whatsapp">Numéro WhatsApp</label>
+        <input type="tel" id="whatsapp" name="WhatsApp" placeholder="Ex. +226xxxxxxxx" required>
+
+        <label for="raison">Pourquoi cette formation ?</label>
+        <textarea id="raison" name="Raison" placeholder="Expliquez brièvement" rows="4" required></textarea>
+
+        <label for="transaction">Numéro de transaction</label>
+        <input type="text" id="transaction" name="Numéro de transaction" placeholder="Ex. +22656967818" required>
+
+        <label for="capture">Capture de la transaction</label>
+        <input type="file" id="capture" name="Capture" accept="image/*" required>
+
+        <button type="submit">S'inscrire</button>
+      </form>
+    </div>
+
+    <div id="confirmation" class="confirmation-message" style="display: none;">
+      Formation envoyée avec succès ! Merci pour votre inscription.
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("formationForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const formData = new FormData(this);
+      const formDataJSON = {};
+
+      formData.forEach((value, key) => {
+        formDataJSON[key] = value;
+      });
+
+      // Récupérer les données du formulaire
+      const nom = formDataJSON.Nom;
+      const prenom = formDataJSON.Prénom;
+      const age = formDataJSON.Âge;
+      const numero = formDataJSON.Numéro;
+      const whatsapp = formDataJSON.WhatsApp;
+      const raison = formDataJSON.Raison;
+      const transaction = formDataJSON['Numéro de transaction'];
+
+      // Créer un message formatté à envoyer à Telegram
+      const message = `
+*Nouvelle inscription* :
+*Nom* : ${nom}
+*Prénom* : ${prenom}
+*Âge* : ${age}
+*Numéro de téléphone* : ${numero}
+*Numéro WhatsApp* : ${whatsapp}
+*Raison* : ${raison}
+*Numéro de transaction* : ${transaction}
+      `;
+
+      // URL de votre bot Telegram
+      const token = '7044574411:AAFxdsxuq3kfwneKewngfbzqVx3OrhCtLcM';
+      const chatId = '7104713412';
+      const urlMessage = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}&parse_mode=Markdown`;
+
+      // URL pour envoyer la photo
+      const urlFile = `https://api.telegram.org/bot${token}/sendPhoto?chat_id=${chatId}`;
+
+      // Créer une nouvelle instance de FormData pour l'image
+      const formDataImage = new FormData();
+      formDataImage.append('photo', formData.get('Capture'));
+
+      // Envoi du message avec la photo
+      fetch(urlMessage)
+        .then(response => response.json())
+        .then(() => {
+          // Ensuite envoyer la photo
+          fetch(urlFile, {
+            method: 'POST',
+            body: formDataImage
+          })
+          .then(response => response.json())
+          .then(() => {
+            document.getElementById("formContainer").style.display = "none";
+            document.getElementById("confirmation").style.display = "block";
+            document.body.style.backgroundColor = "#fff";  // Fond blanc après soumission
+          })
+          .catch(error => alert('Erreur lors de l\'envoi de la photo.'));
+        })
+        .catch(error => alert('Erreur lors de l\'envoi du message.'));
+    });
+  </script>
+</body>
+</html>
